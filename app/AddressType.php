@@ -1,0 +1,71 @@
+<?php namespace App;
+
+use SortableTrait, SearchTrait;
+
+class AddressType extends BaseModel
+{
+
+    use SortableTrait, SearchTrait;
+
+    protected $fillable = [
+        'name',
+        'code',
+        'disabled',
+    ];
+
+    public $sortable = [
+        'name',
+        'code',
+    ];
+
+    public $searchable = [
+        'name' => 'LIKE',
+        'code' => 'LIKE',
+    ];
+
+    public function sortableColumns()
+    {
+        return $this->sortable;
+    }
+
+    public function searchableColumns()
+    {
+        return $this->searchable;
+    }
+
+    /** relationships */
+
+    /* update later
+    public function users()
+    {
+        return $this->belongsToMany('App\User');
+    }
+    */
+
+
+    /** scopes */
+
+    public function scopeOrdered($query, $amount = null)
+    {
+        $query->orderBy('name'); // leave "Others" at the end
+        if (!empty($amount)) {
+            $query->take($amount);
+        }
+
+        return $query;
+    }
+
+    /** Methods, Accessor(get) and Mutators(set) */
+
+    static public function addressTypesCB($default = [])
+    {
+        $addressTypes = self::orderBy('name')->lists('name', 'id')->toArray();
+
+        if (!empty($default)) {
+            return self::mergeAssoc($default, $addressTypes);
+        }
+
+        return $addressTypes;
+    }
+
+}

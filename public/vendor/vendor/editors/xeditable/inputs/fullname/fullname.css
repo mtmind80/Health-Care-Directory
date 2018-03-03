@@ -1,0 +1,9 @@
+.editable-fullname {
+    display: block;
+    margin-bottom: 5px;  
+}
+
+.editable-fullname span {
+    width: 80px;  
+    display: inline-block;
+}
